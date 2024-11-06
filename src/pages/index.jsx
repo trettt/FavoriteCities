@@ -1,3 +1,4 @@
+import NavigationMenu from "@/components/navigation-menu";
 import Head from "next/head";
 
 export default function Home() {
@@ -9,6 +10,8 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/city-icon.png" />
       </Head>
+      <NavigationMenu />
+      <h1>Home</h1>
     </>
   );
 }
