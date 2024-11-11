@@ -13,7 +13,6 @@ import { FaArrowCircleRight, FaArrowCircleLeft } from "react-icons/fa";
 import {
   Home as HomeIcon,
   Search as SearchIcon,
-  LocationCity as CityIcon,
   Favorite as FavoriteIcon,
 } from "@mui/icons-material";
 
@@ -26,7 +25,6 @@ export default function NavigationMenu() {
   const items = [
     { text: "Home", icon: <HomeIcon />, path: "/" },
     { text: "Search", icon: <SearchIcon />, path: "/search" },
-    { text: "Cities", icon: <CityIcon />, path: "/cities" },
     { text: "Favorites", icon: <FavoriteIcon />, path: "/favorites" },
   ];
 
@@ -45,18 +43,18 @@ export default function NavigationMenu() {
       <Divider sx={{ mb: 2 }} />
 
       <List>
-      {items.map(({ text, icon, path }, index) => (
-        <ListItem key={text} disablePadding>
-          <ListItemButton onClick={() => router.push(path)}>
-            <ListItemIcon>{icon}</ListItemIcon>
-            <ListItemText
-              primary={text}
-              primaryTypographyProps={{ fontWeight: "medium" }}
-            />
-          </ListItemButton>
-        </ListItem>
-      ))}
-    </List>
+        {items.map(({ text, icon, path }) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton onClick={() => router.push(path)}>
+              <ListItemIcon>{icon}</ListItemIcon>
+              <ListItemText
+                primary={text}
+                primaryTypographyProps={{ fontWeight: "medium" }}
+              />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
     </Box>
   );
 
