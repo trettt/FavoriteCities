@@ -10,6 +10,7 @@ export default async function handler(req, res) {
 
     try {
       if (query) {
+        // Fetch city data from geocoding API
         const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
           query
         )}`;
@@ -52,12 +53,6 @@ export default async function handler(req, res) {
         );
 
         return res.status(200).json(enrichedCities);
-      }
-
-      if (cityId) {
-        return res
-          .status(200)
-          .json({ message: "City details not implemented yet" });
       }
     } catch (error) {
       return res.status(500).json({ error: "Internal server error!" });

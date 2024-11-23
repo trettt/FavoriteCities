@@ -1,15 +1,15 @@
 import Box from "@mui/material/Box";
-import * as React from "react";
 import Cities from "@/components/cities";
 import Input from "@mui/material/Input";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
+import { useState } from "react";
 
 export default function Search() {
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [citiesData, setCitiesData] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [citiesData, setCitiesData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const emptyInput = () => {
     setSearchQuery("");
@@ -29,11 +29,21 @@ export default function Search() {
       }
       const data = await res.json();
       setCitiesData(data);
+      saveCitiesToLocalStorage(data);
       emptyInput();
     } catch (error) {
       setError(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const saveCitiesToLocalStorage = (cities) => {
+    try {
+      localStorage.setItem("savedCities", JSON.stringify(cities));
+      console.log("Cities saved to local storage.");
+    } catch (err) {
+      console.error("Error saving cities to local storage:", err);
     }
   };
 
