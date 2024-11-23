@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
@@ -13,20 +12,20 @@ import { FaArrowCircleRight, FaArrowCircleLeft } from "react-icons/fa";
 import {
   Home as HomeIcon,
   Search as SearchIcon,
-  LocationCity as CityIcon,
   Favorite as FavoriteIcon,
 } from "@mui/icons-material";
-
+import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function NavigationMenu() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { data: session } = useSession();
 
   const items = [
     { text: "Home", icon: <HomeIcon />, path: "/" },
     { text: "Search", icon: <SearchIcon />, path: "/search" },
-    { text: "Cities", icon: <CityIcon />, path: "/cities" },
     { text: "Favorites", icon: <FavoriteIcon />, path: "/favorites" },
   ];
 
@@ -41,22 +40,39 @@ export default function NavigationMenu() {
           <FaArrowCircleLeft />
         </IconButton>
       </Box>
-
       <Divider sx={{ mb: 2 }} />
-
       <List>
-      {items.map(({ text, icon, path }, index) => (
-        <ListItem key={text} disablePadding>
-          <ListItemButton onClick={() => router.push(path)}>
-            <ListItemIcon>{icon}</ListItemIcon>
-            <ListItemText
-              primary={text}
-              primaryTypographyProps={{ fontWeight: "medium" }}
-            />
-          </ListItemButton>
-        </ListItem>
-      ))}
-    </List>
+        {items.map(({ text, icon, path }) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton onClick={() => router.push(path)}>
+              <ListItemIcon>{icon}</ListItemIcon>
+              <ListItemText
+                primary={text}
+                primaryTypographyProps={{ fontWeight: "medium" }}
+              />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      {session ? (
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={() => signOut()}
+          sx={{ textTransform: "none" }}
+        >
+          Sign Out
+        </Button>
+      ) : (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => signIn()}
+          sx={{ textTransform: "none" }}
+        >
+          Sign In
+        </Button>
+      )}
     </Box>
   );
 
