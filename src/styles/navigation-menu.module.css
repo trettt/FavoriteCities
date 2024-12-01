@@ -1,0 +1,65 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 7vh;
+  background-color: #4793af;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 0 20px;
+}
+
+.navList {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  gap: 50px;
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.navItem {
+  margin-right: 0.5rem;
+}
+
+.navButton:hover {
+  color: #e0f7fa;
+  transform: translateY(-10px);
+}
+
+.navText,
+.authText {
+  margin-left: 0.5rem;
+}
+
+.authButton {
+  background-color: #ffffff;
+  color: #4793af;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease, color 0.2s ease;
+  font-weight: bold;
+}
+
+.authButton:hover {
+  background-color: #e0f7fa;
+  color: #00796b;
+  transform: scale(1.05);
+}
+
+.authButton:active {
+  transform: scale(0.98);
+}
