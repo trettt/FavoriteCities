@@ -3,15 +3,12 @@ import Head from "next/head";
 import { ThemeProvider } from "@mui/material/styles";
 import customTheme from "../themes/custom-theme";
 import CssBaseline from "@mui/material/CssBaseline";
-import { SessionProvider } from "next-auth/react";
+import AuthenticationProvider from "@/utils/authenticationProvider";
 
-export default function App({
-  Component,
-  pageProps: { session, ...pageProps },
-}) {
+export default function App({ Component, pageProps }) {
   return (
     <>
-      <SessionProvider session={session}>
+      <AuthenticationProvider>
         <ThemeProvider theme={customTheme}>
           <CssBaseline />
           <Head>
@@ -21,7 +18,7 @@ export default function App({
           <NavigationMenu />
           <Component {...pageProps} />
         </ThemeProvider>
-      </SessionProvider>
+      </AuthenticationProvider>
     </>
   );
 }

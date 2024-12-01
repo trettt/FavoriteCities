@@ -6,18 +6,42 @@ import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
 import Grid from "@mui/material/Grid2";
 import Link from "next/link";
+import { CardActions, IconButton } from "@mui/material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 export default function Cities({ cities }) {
   if (cities.length === 0) {
     return <div>Search for some cities</div>;
   }
 
+  const handleSaveCityToFavorite = async (event) => {
+    try {
+      const email = localStorage.getItem("user");
+      if (email) {
+        const res = await fetch(`/api/favorites`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            cityId: event,
+          }),
+        });
+
+        const data = await res.json();
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
+
   return (
     <Grid container spacing={2}>
       {cities.map((city, index) => (
         <Grid item xs={12} sm={6} md={4} key={index}>
-          <Link href={`/cities/${city.id}`}>
-            <Card sx={{ maxWidth: 345 }}>
+          <Card sx={{ maxWidth: 345 }}>
+            <Link href={`/cities/${city.id}`}>
               <CardActionArea>
                 <CardMedia
                   component="img"
@@ -34,8 +58,18 @@ export default function Cities({ cities }) {
                   </Typography>
                 </CardContent>
               </CardActionArea>
-            </Card>
-          </Link>
+            </Link>
+            <CardActions disableSpacing>
+              <IconButton
+                aria-label="add to favorites"
+                onClick={(event) => {
+                  handleSaveCityToFavorite(city.id);
+                }}
+              >
+                <FavoriteIcon />
+              </IconButton>
+            </CardActions>
+          </Card>
         </Grid>
       ))}
     </Grid>

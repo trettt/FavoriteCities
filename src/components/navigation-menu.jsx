@@ -1,95 +1,183 @@
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Container from "@mui/material/Container";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
-import { FaArrowCircleRight, FaArrowCircleLeft } from "react-icons/fa";
+import Typography from "@mui/material/Typography";
+import MenuIcon from "@mui/icons-material/Menu";
+import Avatar from "@mui/material/Avatar";
+import Tooltip from "@mui/material/Tooltip";
 import {
   Home as HomeIcon,
   Search as SearchIcon,
   Favorite as FavoriteIcon,
 } from "@mui/icons-material";
-import { useSession, signIn, signOut } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useState } from "react";
+import LoginIcon from "@mui/icons-material/Login";
+import {
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import { useAuthentication } from "@/utils/authenticationProvider";
+
+const pages = [
+  { text: "Home", icon: <HomeIcon />, path: "/home" },
+  { text: "Search", icon: <SearchIcon />, path: "/search" },
+  { text: "Favorites", icon: <FavoriteIcon />, path: "/favorites" },
+];
+
+const profileActions = ["Logout"];
 
 export default function NavigationMenu() {
-  const [open, setOpen] = useState(false);
   const router = useRouter();
-  const { data: session } = useSession();
 
-  const items = [
-    { text: "Home", icon: <HomeIcon />, path: "/" },
-    { text: "Search", icon: <SearchIcon />, path: "/search" },
-    { text: "Favorites", icon: <FavoriteIcon />, path: "/favorites" },
-  ];
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
-  const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen);
+  const { isUserAuthenticated, setIsUserAuthenticated } = useAuthentication();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      setIsUserAuthenticated(true);
+    } else {
+      setIsUserAuthenticated(false);
+    }
+    console.log("user", user);
+  }, []);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
   };
 
-  const DrawerList = (
-    <Box sx={{ width: 200, padding: 2 }} role="presentation">
-      <Box>
-        <IconButton onClick={toggleDrawer(false)}>
-          <FaArrowCircleLeft />
-        </IconButton>
-      </Box>
-      <Divider sx={{ mb: 2 }} />
-      <List>
-        {items.map(({ text, icon, path }) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton onClick={() => router.push(path)}>
-              <ListItemIcon>{icon}</ListItemIcon>
-              <ListItemText
-                primary={text}
-                primaryTypographyProps={{ fontWeight: "medium" }}
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      {session ? (
-        <Button
-          variant="outlined"
-          color="error"
-          onClick={() => signOut()}
-          sx={{ textTransform: "none" }}
-        >
-          Sign Out
-        </Button>
-      ) : (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => signIn()}
-          sx={{ textTransform: "none" }}
-        >
-          Sign In
-        </Button>
-      )}
-    </Box>
-  );
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const handleNavigate = (path) => {
+    router.push(path);
+    handleCloseNavMenu();
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setIsUserAuthenticated(false);
+    handleCloseUserMenu();
+  };
 
   return (
-    <>
-      <Button
-        onClick={toggleDrawer(true)}
-        sx={{
-          fontSize: "1.9rem",
-        }}
-        color="white"
-      >
-        <FaArrowCircleRight />
-      </Button>
-      <Drawer anchor="left" open={open} onClose={toggleDrawer(false)}>
-        {DrawerList}
-      </Drawer>
-    </>
+    <AppBar position="static">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="menu"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{ display: { xs: "block", md: "none" } }}
+            >
+              {pages.map((page) => (
+                <MenuItem
+                  key={page.text}
+                  onClick={() => handleNavigate(page.path)}
+                  sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                >
+                  {page.icon}
+                  <Typography textAlign="center">{page.text}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+
+          <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+            {pages.map(({ text, icon, path }) => (
+              <ListItem key={text} disablePadding>
+                <ListItemButton onClick={() => router.push(path)}>
+                  <ListItemIcon>{icon}</ListItemIcon>
+                  <ListItemText
+                    primary={text}
+                    primaryTypographyProps={{ fontWeight: "medium" }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            {isUserAuthenticated ? (
+              <>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar alt="User Avatar" />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {profileActions.map((action) => (
+                    <MenuItem key={action} onClick={handleLogout}>
+                      <Typography textAlign="center">{action}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </>
+            ) : (
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => router.push("/authentication")}>
+                  <LoginIcon />
+                  <ListItemText>Authentication</ListItemText>
+                </ListItemButton>
+              </ListItem>
+            )}
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 }

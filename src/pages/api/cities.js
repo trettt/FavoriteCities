@@ -10,7 +10,6 @@ export default async function handler(req, res) {
 
     try {
       if (query) {
-        // Fetch city data from geocoding API
         const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
           query
         )}`;
