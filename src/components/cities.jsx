@@ -10,10 +10,6 @@ import { CardActions, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
 export default function Cities({ cities }) {
-  if (cities.length === 0) {
-    return <div>Search for some cities</div>;
-  }
-
   const handleSaveCityToFavorite = async (event) => {
     try {
       const email = localStorage.getItem("user");
