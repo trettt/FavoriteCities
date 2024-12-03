@@ -9,29 +9,27 @@ export default function Cities() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const getCityFromLocalStorage = (cityId) => {
-    try {
-      const cities = localStorage.getItem("savedCities");
-      const parsedCities = cities ? JSON.parse(cities) : [];
-      return parsedCities.find((city) => String(city.id) === String(cityId));
-    } catch (err) {
-      console.error("Error retrieving city from local storage:", err);
-      return null;
-    }
-  };
-
   useEffect(() => {
-    if (cityId) {
-      const retrievedCity = getCityFromLocalStorage(cityId);
+    const fetchCity = async () => {
+      if (!cityId) return;
 
-      if (retrievedCity) {
-        setCity(retrievedCity);
-      } else {
-        setError(new Error("City not found in local storage."));
+      try {
+        const res = await fetch(`/api/cities?cityId=${cityId}`);
+        if (!res.ok) {
+          throw new Error("Failed to fetch city data.");
+        }
+
+        const data = await res.json();
+        setCity(data);
+      } catch (err) {
+        console.error("Error fetching city:", err);
+        setError(err);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      setLoading(false);
-    }
+    fetchCity();
   }, [cityId]);
 
   if (loading) {
@@ -54,7 +52,7 @@ export default function Cities() {
     <>
       <h1>{city.name}</h1>
       <p>Country: {city.country}</p>
-      <p>Latitude: {city.latitude}</p>  
+      <p>Latitude: {city.latitude}</p>
       <p>Longitude: {city.longitude}</p>
       {city.country_flag && (
         <img src={city.country_flag} alt={`${city.name} flag`} />

@@ -3,28 +3,24 @@ import { useEffect } from "react";
 import { useAuthentication } from "@/utils/authenticationProvider";
 import styles from "@/styles/navigation-menu.module.css";
 
-const pages = [
-  {
-    text: "Home",
-    icon: <span className="material-symbols-outlined">house</span>,
-    path: "/home",
-  },
-  {
-    text: "Search",
-    icon: <span className="material-symbols-outlined">location_searching</span>,
-    path: "/search",
-  },
-  {
-    text: "Favorites",
-    icon: <span className="material-symbols-outlined">favorite</span>,
-    path: "/favorites",
-  },
-];
-
 export default function NavigationMenu() {
   const router = useRouter();
 
   const { isUserAuthenticated, setIsUserAuthenticated } = useAuthentication();
+  const pages = [
+    {
+      text: "Home",
+      icon: <span className="material-symbols-outlined">house</span>,
+      path: "/home",
+    },
+    {
+      text: "Search",
+      icon: (
+        <span className="material-symbols-outlined">location_searching</span>
+      ),
+      path: "/search",
+    },
+  ];
 
   useEffect(() => {
     const user = localStorage.getItem("user");
@@ -39,6 +35,14 @@ export default function NavigationMenu() {
     localStorage.removeItem("user");
     setIsUserAuthenticated(false);
   };
+
+  if (isUserAuthenticated) {
+    pages.push({
+      text: "Favorites",
+      icon: <span className="material-symbols-outlined">favorite</span>,
+      path: "/favorites",
+    });
+  }
 
   return (
     <>
