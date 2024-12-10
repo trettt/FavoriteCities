@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "@/styles/city-card.module.css";
 import { useAuthentication } from "@/utils/authenticationProvider";
 import Link from "next/link";
@@ -6,6 +6,26 @@ import Link from "next/link";
 export default function CityCard({ city }) {
   const { isUserAuthenticated } = useAuthentication();
   const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const email = localStorage.getItem("user");
+        if (email) {
+          const res = await fetch(`/api/favorites?email=${email}`);
+          const data = await res.json();
+          if (data.cities && data.cities.includes(city.id.toString())) {
+            setIsFavorite(true);
+          }
+        }
+      } catch (error) {
+        console.error("Fetching favorites failed:", error);
+      }
+    };
+    if (isUserAuthenticated) {
+      fetchFavorites();
+    }
+  }, [city.id, isUserAuthenticated]);
 
   const handleSaveCityToFavorite = async (event) => {
     event.preventDefault();
