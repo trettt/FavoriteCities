@@ -1,0 +1,50 @@
+.card {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.cityName {
+  margin-left: auto;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.cardBottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.country {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #666;
+}
+
+.favoriteButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 2rem;
+  color: #ff5252;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.favoriteButton:hover {
+  color: #ff1744;
+  transform: scale(1.2);
+}
+
+.favoriteButton:active {
+  transform: scale(0.95);
+}
