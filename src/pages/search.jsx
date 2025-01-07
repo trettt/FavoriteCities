@@ -1,9 +1,6 @@
-import Box from "@mui/material/Box";
 import Cities from "@/components/cities";
-import Input from "@mui/material/Input";
-import InputAdornment from "@mui/material/InputAdornment";
-import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
+import styles from "@/styles/search.module.css";
 
 export default function Search() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,7 +26,6 @@ export default function Search() {
       }
       const data = await res.json();
       setCitiesData(data);
-      saveCitiesToLocalStorage(data);
       emptyInput();
     } catch (error) {
       setError(error);
@@ -38,43 +34,38 @@ export default function Search() {
     }
   };
 
-  const saveCitiesToLocalStorage = (cities) => {
-    try {
-      localStorage.setItem("savedCities", JSON.stringify(cities));
-      console.log("Cities saved to local storage.");
-    } catch (err) {
-      console.error("Error saving cities to local storage:", err);
-    }
-  };
-
   return (
     <>
-      <Box>
-        <h1>Search</h1>
-        <form variant="standard" onSubmit={handleSubmit}>
-          <Input
-            id="input-with-icon"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            startAdornment={
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            }
-          ></Input>
-        </form>
-      </Box>
-      {loading && (
-        <div>
-          <p>Loading...</p>
+      <div className={styles.container}>
+        <div className={styles["content-box"]}>
+          <h1 className={styles.heading}>Find your favorite places!</h1>
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <span
+              className={`${styles["search-icon"]} material-symbols-outlined`}
+            >
+              search
+            </span>
+
+            <input
+              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchQuery}
+              type="text"
+              className={styles.input}
+              placeholder="e.g. Brasov..."
+            />
+          </form>
+
+          {loading && <span className={styles.loader}></span>}
+
+          {error && (
+            <div className={styles.error}>
+              <p>Error: {error.message}</p>
+            </div>
+          )}
+
+          {!loading && !error && <Cities cities={citiesData} />}
         </div>
-      )}
-      {error && (
-        <div>
-          <p>Error: {error.message}</p>
-        </div>
-      )}
-      {!loading && !error && <Cities cities={citiesData} />}
+      </div>
     </>
   );
 }
