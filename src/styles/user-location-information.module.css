@@ -1,0 +1,49 @@
+.container {
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    max-width: 400px;
+    margin: 20px auto;
+  }
+  
+  .header {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .card {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .info {
+    font-size: 1.1em;
+    color: #555;
+    margin: 8px 0;
+  }
+  
+  .loadingContainer {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .loadingText {
+    color: #555;
+    font-size: 1.2em;
+  }
+  
+  .errorContainer {
+    text-align: center;
+    padding: 20px;
+    color: #b00;
+  }
+  
+  .errorText {
+    font-size: 1.2em;
+  }
+  

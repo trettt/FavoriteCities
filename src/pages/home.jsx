@@ -1,4 +1,5 @@
 import Slideshow from "@/components/slideshow";
+import UserLocationInfo from "@/components/user-location-information";
 import styles from "@/styles/home.module.css";
 
 export default function Home() {
@@ -9,7 +10,7 @@ export default function Home() {
       </div>
       <div className={styles.descriptionSection}>
         <h1 className={styles.title}>Welcome </h1>
-        <p className={styles.description}>Some description</p>
+        <UserLocationInfo/>
       </div>
     </div>
   );
